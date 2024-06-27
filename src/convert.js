@@ -1,17 +1,25 @@
 import kuromoji from 'kuromoji';
 
-export function convertKanjiToHiragana() {
-  console.log("Starting conversion...");
+let originalHTML = '';
+let isConverted = false;
+
+export function toggleKanjiHiragana() {
+  console.log("Toggling conversion...");
   return new Promise((resolve, reject) => {
-    initConverter((err) => {
-      if (err) {
-        console.error("Conversion failed:", err);
-        reject(err);
-      } else {
-        console.log("Conversion completed successfully");
-        resolve();
-      }
-    });
+    if (isConverted) {
+      revertToOriginal();
+      resolve();
+    } else {
+      initConverter((err) => {
+        if (err) {
+          console.error("Conversion failed:", err);
+          reject(err);
+        } else {
+          console.log("Conversion completed successfully");
+          resolve();
+        }
+      });
+    }
   });
 }
 
@@ -42,6 +50,8 @@ function katakanaToHiragana(str) {
 }
 
 function convertText(tokenizer) {
+  originalHTML = document.body.innerHTML;
+  
   function containsKanji(text) {
     return /[\u4e00-\u9faf]/.test(text);
   }
@@ -99,12 +109,21 @@ function convertText(tokenizer) {
   console.log("Converting text...");
   traverseAndConvert(document.body);
   console.log("Conversion completed.");
+  isConverted = true;
   
   // Force a repaint
   document.body.style.visibility = 'hidden';
   document.body.offsetHeight; // Trigger a reflow
   document.body.style.visibility = 'visible';
 }
+
+function revertToOriginal() {
+  document.body.innerHTML = originalHTML;
+  isConverted = false;
+  console.log("Reverted to original text.");
+}
+
+
 
 // import kuromoji from 'kuromoji';
 
@@ -143,6 +162,12 @@ function convertText(tokenizer) {
 //   });
 // }
 
+// function katakanaToHiragana(str) {
+//   return str.replace(/[\u30A0-\u30FF]/g, function(match) {
+//     return String.fromCharCode(match.charCodeAt(0) - 0x60);
+//   });
+// }
+
 // function convertText(tokenizer) {
 //   function containsKanji(text) {
 //     return /[\u4e00-\u9faf]/.test(text);
@@ -157,27 +182,33 @@ function convertText(tokenizer) {
 //     console.log("Processing text node:", text.substring(0, 50) + "...");
 //     const tokens = tokenizer.tokenize(text);
     
-//     const convertedText = tokens.map(token => {
-//       if (token.word_type === 'KANJI') {
-//         console.log(`Converting: ${token.surface_form} to ${token.reading}`);
-//         return token.reading;
-//       } else if (token.word_type === 'KNOWN') {
-//         // For non-KANJI known words, convert if they contain kanji
-//         if (containsKanji(token.surface_form)) {
-//           console.log(`Converting known word: ${token.surface_form} to ${token.reading}`);
-//           return token.reading;
-//         }
+//     const convertedSpans = tokens.map(token => {
+//       let converted;
+//       if (token.word_type === 'KANJI' || (token.word_type === 'KNOWN' && containsKanji(token.surface_form))) {
+//         converted = katakanaToHiragana(token.reading);
+//         console.log(`Converting: ${token.surface_form} to ${converted}`);
+//       } else {
+//         converted = token.surface_form;
 //       }
-//       return token.surface_form;
+      
+//       if (converted !== token.surface_form) {
+//         return `<span class="converted-word" data-original="${token.surface_form}" style="text-decoration: underline; text-decoration-thickness: 1px; cursor: pointer;">${converted}</span>`;
+//       } else {
+//         return converted;
+//       }
 //     }).join('');
     
-//     if (text !== convertedText) {
-//       console.log("Before:", text.substring(0, 50) + "...");
-//       console.log("After:", convertedText.substring(0, 50) + "...");
-//       node.nodeValue = convertedText;
-//     } else {
-//       console.log("No change needed for this node");
-//     }
+//     const span = document.createElement('span');
+//     span.innerHTML = convertedSpans;
+//     span.addEventListener('click', function(e) {
+//       if (e.target.classList.contains('converted-word')) {
+//         const current = e.target.textContent;
+//         e.target.textContent = e.target.dataset.original;
+//         e.target.dataset.original = current;
+//       }
+//     });
+    
+//     node.parentNode.replaceChild(span, node);
 //   }
 
 //   function traverseAndConvert(node) {
@@ -188,7 +219,7 @@ function convertText(tokenizer) {
 //       if (node.tagName.toLowerCase() === 'ruby' || node.tagName.toLowerCase() === 'rt') {
 //         return;
 //       }
-//       node.childNodes.forEach(child => traverseAndConvert(child));
+//       Array.from(node.childNodes).forEach(child => traverseAndConvert(child));
 //     }
 //   }
 
