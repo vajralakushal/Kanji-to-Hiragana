@@ -1,13 +1,19 @@
 {
   "manifest_version": 3,
   "name": "Kanji to Hiragana Converter",
-  "version": "1.0",
+  "version": "0.0.0.1",
   "description": "Replaces Kanji with Hiragana and adds spaces between words and particles on Japanese websites.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab"],
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": "images/kanji.png"
+    "default_popup": "popup.html"
   },
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "64": "images/icon64.png",
+    "128": "images/icon128.png"
+  },
+
   "background": {
     "service_worker": "background.js"
   },

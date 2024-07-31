@@ -2,6 +2,7 @@ import kuromoji from 'kuromoji';
 
 let originalHTML = '';
 let isConverted = false;
+let isFuriganaAdded = false;
 
 export function toggleKanjiHiragana() {
   console.log("Toggling conversion...");
@@ -16,6 +17,27 @@ export function toggleKanjiHiragana() {
           reject(err);
         } else {
           console.log("Conversion completed successfully");
+          resolve();
+        }
+      });
+    }
+  });
+}
+
+//testing this function
+export function toggleFurigana() {
+  console.log("Toggling furigana...");
+  return new Promise((resolve, reject) => {
+    if (isFuriganaAdded) {
+      removeFurigana();
+      resolve();
+    } else {
+      addFurigana((err) => {
+        if (err) {
+          console.error("Adding furigana failed:", err);
+          reject(err);
+        } else {
+          console.log("Furigana added successfully");
           resolve();
         }
       });
@@ -41,6 +63,82 @@ function initConverter(callback) {
     convertText(tokenizer);
     callback(null);
   });
+}
+
+//testing next two functions
+function addFurigana(callback) {
+  console.log("Adding furigana...");
+  kuromoji.builder({ dicPath: chrome.runtime.getURL('dict/') }).build((err, tokenizer) => {
+    if (err) {
+      console.error("Error initializing tokenizer:", err);
+      callback(err);
+      return;
+    }
+    console.log("Tokenizer initialized successfully");
+    
+    if (!isConverted) {
+      originalHTML = document.body.innerHTML;
+    }
+    
+    function isKanji(char) {
+      return (char >= '\u4e00' && char <= '\u9faf') || (char >= '\u3400' && char <= '\u4dbf');
+    }
+
+    //testing this
+    function hasExistingFurigana(node) {
+      return node.parentNode.nodeName.toLowerCase() === 'ruby' ||
+             (node.parentNode.parentNode && node.parentNode.parentNode.nodeName.toLowerCase() === 'ruby');
+    }
+
+    function processTextNode(node) {
+
+      //testing thsi too
+      if (hasExistingFurigana(node)) {
+        return; // Skip if the node already has furigana
+      }
+
+      const text = node.nodeValue;
+      if (!text.split('').some(isKanji)) {
+        return; // Skip if there's no kanji in the text
+      }
+      const tokens = tokenizer.tokenize(text);
+      
+      const furiganaSpans = tokens.map(token => {
+        if (token.word_type === 'KNOWN' && token.surface_form.split('').some(isKanji)) {
+          return `<ruby>${token.surface_form}<rt>${katakanaToHiragana(token.reading)}</rt></ruby>`;
+        } else {
+          return token.surface_form;
+        }
+      }).join('');
+      
+      const span = document.createElement('span');
+      span.innerHTML = furiganaSpans;
+      node.parentNode.replaceChild(span, node);
+    }
+
+    function traverseAndAddFurigana(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        processTextNode(node);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+          //testing this if
+          if (node.nodeName.toLowerCase() === 'ruby') {
+            return; // Skip processing for existing ruby elements
+          }
+        Array.from(node.childNodes).forEach(child => traverseAndAddFurigana(child));
+      }
+    }
+
+    traverseAndAddFurigana(document.body);
+    isFuriganaAdded = true;
+    callback(null);
+  });
+}
+
+function removeFurigana() {
+  document.body.innerHTML = originalHTML;
+  isFuriganaAdded = false;
+  isConverted = false;
+  console.log("Furigana removed.");
 }
 
 function katakanaToHiragana(str) {
@@ -120,5 +218,6 @@ function convertText(tokenizer) {
 function revertToOriginal() {
   document.body.innerHTML = originalHTML;
   isConverted = false;
+  isFuriganaAdded = false;
   console.log("Reverted to original text.");
 }
