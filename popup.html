@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Kanji to Hiragana Converter</title>
-    <style>
-      body {
-        width: 200px;
-        padding: 10px;
-      }
-      button {
-        width: 100%;
-        padding: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <button id="convertButton">Convert Kanji to Hiragana</button>
-    <button id="furiganaButton">Add Furigana</button>
-    <script src="dist/popup.bundle.js"></script>
-  </body>
+<head>
+  <title>Kanji to Hiragana Converter</title>
+  <style>
+    body { width: 200px; padding: 10px; }
+    button, select { width: 100%; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <button id="convertButton">Convert Kanji to Hiragana</button>
+  <button id="furiganaButton">Add Furigana</button>
+  <label>
+    <input type="checkbox" id="ankiIntegration"> Enable Anki Integration
+  </label>
+  <select id="ankiDeck" style="display: none;">
+    <option value="">Select Anki Deck</option>
+  </select>
+  <script src="dist/popup.bundle.js"></script>
+</body>
 </html>
