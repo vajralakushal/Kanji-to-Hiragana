@@ -267,6 +267,7 @@ async function checkAnkiCardStatus(word, deck) {
   
   // Assuming the first card if multiple exist
   const card = cardInfo.result[0];
+  console.log(card);
   
   if (card.interval < 21) {
     return 'learning';
