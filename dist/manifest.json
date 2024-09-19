@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Kanji to Hiragana Converter",
-  "version": "0.0.0.1",
-  "description": "Replaces Kanji with Hiragana and adds spaces between words and particles on Japanese websites.",
+  "version": "0.0.0.2",
+  "description": "Can replace Kanji with hiragana, add Furigana, and also only change the text if you haven't seen the words in your Anki studies yet.",
   "permissions": [
     "activeTab",
     "storage"

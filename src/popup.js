@@ -1,12 +1,12 @@
-import { toggleKanjiHiragana, toggleFurigana } from './convert';
+import { /*toggleKanjiHiragana,*/ toggleFurigana } from './convert';
 
-let isKanjiConverted = false;
+//let isKanjiConverted = false;
 let isFuriganaAdded = false;
 let isAnkiEnabled = false;
 let selectedDeck = '';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const convertButton = document.getElementById('convertButton');
+  //const convertButton = document.getElementById('convertButton');
   const furiganaButton = document.getElementById('furiganaButton');
   const ankiIntegrationCheckbox = document.getElementById('ankiIntegration');
   const ankiDeckSelect = document.getElementById('ankiDeck');
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  convertButton.addEventListener('click', () => {
+  /*convertButton.addEventListener('click', () => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       const action = isKanjiConverted ? "revert" : "convert";
       chrome.tabs.sendMessage(tabs[0].id, {
@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+  */
 
   furiganaButton.addEventListener('click', () => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {

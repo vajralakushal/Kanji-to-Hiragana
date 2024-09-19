@@ -1,10 +1,10 @@
 import kuromoji from 'kuromoji';
 
 let originalHTML = '';
-let isConverted = false;
+//let isConverted = false;
 let isFuriganaAdded = false;
 
-export function toggleKanjiHiragana(ankiEnabled, selectedDeck) {
+/*export function toggleKanjiHiragana(ankiEnabled, selectedDeck) {
   console.log("Toggling conversion...");
   return new Promise((resolve, reject) => {
     if (isConverted) {
@@ -25,6 +25,7 @@ export function toggleKanjiHiragana(ankiEnabled, selectedDeck) {
     }
   });
 }
+  */
 
 export function toggleFurigana(ankiEnabled, selectedDeck) {
   console.log("Toggling furigana...");
@@ -46,7 +47,7 @@ export function toggleFurigana(ankiEnabled, selectedDeck) {
   });
 }
 
-function initConverter(ankiEnabled, selectedDeck, callback) {
+/*function initConverter(ankiEnabled, selectedDeck, callback) {
   console.log("Initializing Kuromoji tokenizer...");
   kuromoji.builder({ dicPath: chrome.runtime.getURL('dict/') }).build((err, tokenizer) => {
     if (err) {
@@ -59,8 +60,9 @@ function initConverter(ankiEnabled, selectedDeck, callback) {
     callback(null);
   });
 }
+*/
 
-async function convertText(tokenizer, ankiEnabled, selectedDeck) {
+/*async function convertText(tokenizer, ankiEnabled, selectedDeck) {
   originalHTML = document.body.innerHTML;
   
   function isKanji(char) {
@@ -131,6 +133,7 @@ async function convertText(tokenizer, ankiEnabled, selectedDeck) {
   document.body.offsetHeight; // Trigger a reflow
   document.body.style.visibility = 'visible';
 }
+  */
 
 async function addFurigana(ankiEnabled, selectedDeck, callback) {
   console.log("Adding furigana...");
@@ -142,9 +145,9 @@ async function addFurigana(ankiEnabled, selectedDeck, callback) {
     }
     console.log("Tokenizer initialized successfully");
     
-    if (!isConverted) {
+    /*if (!isConverted) {
       originalHTML = document.body.innerHTML;
-    }
+    }*/
     
     function isKanji(char) {
       return (char >= '\u4e00' && char <= '\u9faf') || (char >= '\u3400' && char <= '\u4dbf');
@@ -208,7 +211,7 @@ async function addFurigana(ankiEnabled, selectedDeck, callback) {
 function removeFurigana() {
   document.body.innerHTML = originalHTML;
   isFuriganaAdded = false;
-  isConverted = false;
+  //isConverted = false;
   console.log("Furigana removed.");
 }
 
@@ -220,7 +223,7 @@ function katakanaToHiragana(str) {
 
 export function revertToOriginal() {
   document.body.innerHTML = originalHTML;
-  isConverted = false;
+  //isConverted = false;
   isFuriganaAdded = false;
   console.log("Reverted to original text.");
 }
