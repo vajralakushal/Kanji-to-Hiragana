@@ -1,21 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>Kanji to Hiragana Converter</title>
   <style>
-    body { width: 200px; padding: 10px; }
-    button, select { width: 100%; margin-bottom: 10px; }
+    body {
+      width: 230px;
+      padding: 10px;
+      font-family: system-ui, sans-serif;
+      font-size: 13px;
+    }
+    button, select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 6px;
+      box-sizing: border-box;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+    #status {
+      margin-top: 4px;
+      color: #555;
+    }
+    #status.warning {
+      color: #b00;
+    }
   </style>
 </head>
 <body>
-  <!--<button id="convertButton">Convert Kanji to Hiragana</button>-->
+  <!-- Toggle buttons: labels flip to "Remove…"/"Revert…" when active -->
   <button id="furiganaButton">Add Furigana</button>
+  <button id="hiraganaButton">Convert Kanji to Hiragana</button>
+
+  <!-- Anki integration: skip words already studied in the chosen deck -->
   <label>
     <input type="checkbox" id="ankiIntegration"> Enable Anki Integration
   </label>
-  <select id="ankiDeck" style="display: none;">
+  <select id="ankiDeck" hidden>
     <option value="">Select Anki Deck</option>
   </select>
-  <script src="dist/popup.bundle.js"></script>
+
+  <!-- Progress / warning messages -->
+  <div id="status" hidden></div>
+
+  <script src="popup.bundle.js"></script>
 </body>
 </html>

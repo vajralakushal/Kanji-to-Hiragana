@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Kanji to Hiragana Converter",
-  "version": "0.0.0.2",
-  "description": "Can replace Kanji with hiragana, add Furigana, and also only change the text if you haven't seen the words in your Anki studies yet.",
+  "version": "0.1.0",
+  "description": "Replace kanji with hiragana or add furigana, skipping words you've already studied in Anki.",
   "permissions": [
     "activeTab",
     "storage"
@@ -19,14 +19,13 @@
     "64": "images/icon64.png",
     "128": "images/icon128.png"
   },
-
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.bundle.js"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["dist/content.bundle.js"],
+      "js": ["content.bundle.js"],
       "run_at": "document_idle"
     }
   ],

@@ -1,19 +1,22 @@
 {
   "name": "kanji-to-hiragana-extension",
   "version": "1.0.0",
-  "description": "Chrome extension to convert Kanji to Hiragana and add spaces between words and particles.",
-  "main": "dist/bundle.js",
+  "description": "Chrome extension that converts kanji to hiragana or adds furigana, skipping words you already know from Anki.",
+  "private": true,
   "scripts": {
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
+    "typecheck": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/preset-env": "^7.14.1",
-    "babel-loader": "^8.2.2",
+    "@types/chrome": "^0.0.268",
+    "@types/kuromoji": "^0.1.3",
     "copy-webpack-plugin": "^12.0.2",
     "path-browserify": "^1.0.1",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.4",
     "webpack": "^5.36.2",
     "webpack-cli": "^4.6.0"
   },
